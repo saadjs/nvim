@@ -1,3 +1,3 @@
 ## Setup Steps
 
-    git clone https://github.com/saadjs/nvim2.0 ~/.config/nvim
+    git clone git@github.com:saadjs/nvim2.0.git ~/.config/nvim

@@ -122,9 +122,6 @@ require("lazy").setup({
       end,
     },
   },
-  -- "gc" to comment visual regions/lines
-  { "numToStr/Comment.nvim", opts = {} },
-
   -- Fuzzy Finder (files, lsp, etc)
   {
     "nvim-telescope/telescope.nvim",
@@ -148,12 +145,6 @@ require("lazy").setup({
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
     build = ":TSUpdate",
-  },
-
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    opts = {},
   },
 })
 

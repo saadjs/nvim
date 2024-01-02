@@ -198,9 +198,23 @@ require('lazy').setup({
 
   {
     "nvimtools/none-ls.nvim",
+    dependencies = {
+      "jay-babu/mason-null-ls.nvim",
+    },
     config = function()
       local null_ls = require("null-ls")
       local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+      local mason_null_ls = require("mason-null-ls")
+
+      mason_null_ls.setup({
+        ensure_installed = {
+          "prettier", -- prettier formatter
+          "stylua",   -- lua formatter
+          "black",    -- python formatter
+          "pylint",   -- python linter
+          "eslint_d", -- js linter
+        },
+      })
 
       null_ls.setup({
         sources = {

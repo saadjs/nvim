@@ -1,3 +1,4 @@
 ## Setup Steps
 
-    git clone git@github.com:saadjs/nvim2.0.git ~/.config/nvim
+1.      brew install ripgrep
+2.      git clone git@github.com:saadjs/nvim.git ~/.config/nvim

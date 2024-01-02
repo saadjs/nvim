@@ -1,5 +1,6 @@
 return {
-  { "folke/which-key.nvim", opts = {} },
+  "folke/which-key.nvim",
+  opts = {},
   config = function()
     -- document existing key chains
     require("which-key").register({

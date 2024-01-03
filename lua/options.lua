@@ -45,6 +45,8 @@ vim.opt.smartcase = true
 -- Keep signcolumn on by default
 vim.wo.signcolumn = "yes"
 
+vim.opt.colorcolumn = "80"
+
 -- Decrease update time
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
@@ -57,3 +59,6 @@ vim.opt.termguicolors = true
 
 -- Confirm before exiting if there are unsaved changes
 vim.opt.confirm = true
+
+vim.opt.scrolloff = 8
+vim.opt.isfname:append("@-@")

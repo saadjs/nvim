@@ -64,6 +64,9 @@ return {
 			-- pyright = {},
 			-- rust_analyzer = {},
 			tsserver = {},
+			jsonls = {},
+			pylsp = {},
+			yamlls = {},
 			-- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
 			lua_ls = {

@@ -16,4 +16,4 @@ return { -- Collection of various small independent plugins/modules
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
     end,
-  },
+}

@@ -14,6 +14,8 @@ return {
 			-- is found.
 			javascript = { { "prettierd", "prettier" } },
 			typescript = { { "prettierd", "prettier" } },
+			go = { "goimports", "gofmt" },
+			["_"] = { "trim_whitespace" },
 		},
 	},
 }

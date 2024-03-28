@@ -14,4 +14,3 @@ return { -- Highlight, edit, and navigate code
 		})
 	end,
 }
-

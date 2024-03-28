@@ -31,3 +31,7 @@ vim.keymap.set("n", "<leader>ee", vim.cmd.Ex)
 vim.keymap.set("i", "jk", "<ESC>")
 
 vim.keymap.set("x", "<leader>p", [["_dP]])
+
+-- Keep window centered when scrolling up/down
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<C-u>", "<C-u>zz")

@@ -1,22 +1,35 @@
 return {
 	"stevearc/conform.nvim",
-	opts = {
-		notify_on_error = false,
-		format_on_save = {
-			timeout_ms = 500,
-			lsp_fallback = true,
-		},
-		formatters_by_ft = {
-			lua = { "stylua" },
-			-- Conform will run multiple formatters sequentially
-			python = { "isort", "black" },
-			-- You can use a sub-list to tell conform to run *until* a formatter
-			-- is found.
-			javascript = { { "prettierd", "prettier" } },
-			typescript = { { "prettierd", "prettier" } },
-			go = { "goimports", "gofmt" },
-			["_"] = { "trim_whitespace" },
-		},
-	},
-}
+	lazy = true,
+	event = { "BufReadPre", "BufNewFile" }, -- to disable, comment this out
+	config = function()
+		local conform = require("conform")
 
+		conform.setup({
+			formatters_by_ft = {
+				javascript = { "prettier" },
+				typescript = { "prettier" },
+				json = { "prettier" },
+				yaml = { "prettier" },
+				markdown = { "prettier" },
+				lua = { "stylua" },
+				python = { "isort", "black" },
+			},
+			-- format_on_save = {
+			-- 	lsp_fallback = true,
+			-- 	async = false,
+			--  quiet = false,
+			-- 	timeout_ms = 1000,
+			-- },
+		})
+
+		vim.keymap.set({ "n", "v" }, "<leader>ff", function()
+			conform.format({
+				lsp_fallback = true,
+				async = false,
+				quiet = false,
+				timeout_ms = 3000,
+			})
+			end, { desc = "Format file or range (in visual mode)" })
+	end,
+}

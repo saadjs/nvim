@@ -57,6 +57,9 @@ return {
 		require("mason").setup()
 		require("mason-lspconfig").setup()
 
+		-- Disable workspace diagnostics
+		vim.diagnostic.config({ virtual_text = false })
+
 		-- Enable the following language servers
 		local servers = {
 			-- clangd = {},

@@ -11,7 +11,10 @@ vim.opt.nu = true
 vim.opt.relativenumber = true
 
 -- relative line numbers in netrw
-vim.cmd([[let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro']])
+vim.cmd([[let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+let g:netrw_banner = 0
+let g:netrw_list_hide = '^\.\.\=/\=$,.DS_Store,.idea,.git,__pycache__,'
+]])
 
 vim.opt.expandtab = true
 vim.opt.tabstop = 4

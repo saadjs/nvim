@@ -13,7 +13,7 @@ vim.opt.relativenumber = true
 -- relative line numbers in netrw
 vim.cmd([[let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 let g:netrw_banner = 0
-let g:netrw_list_hide = '^\.\.\=/\=$,.DS_Store,.idea,.git,__pycache__,'
+let g:netrw_list_hide = '**/.git,**/.svn,**/.hg,**/.DS_Store,**/Thumbs.db'
 ]])
 
 vim.opt.expandtab = true

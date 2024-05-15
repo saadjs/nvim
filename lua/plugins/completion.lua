@@ -80,8 +80,14 @@ return { -- Autocompletion
 				{ name = "nvim_lsp" },
 				{ name = "luasnip" },
 				{ name = "path" },
+				-- disable text suggestions i.e. abc suggestions in VS Code
+				{
+					name = 'nvim_lsp',
+					entry_filter = function(entry, ctx)
+						return require('cmp.types').lsp.CompletionItemKind[entry:get_kind()] ~= 'Text'
+					end
+				}
 			},
 		})
 	end,
 }
-

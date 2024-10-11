@@ -9,7 +9,7 @@ return {
 
 		-- Useful status updates for LSP
 		-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-		{ "j-hui/fidget.nvim",       opts = {} },
+		{ "j-hui/fidget.nvim", opts = {} },
 
 		"folke/neodev.nvim",
 	},
@@ -66,7 +66,7 @@ return {
 			gopls = {},
 			-- pyright = {},
 			-- rust_analyzer = {},
-			tsserver = {},
+			ts_ls = {},
 			jsonls = {},
 			pylsp = {},
 			yamlls = {},

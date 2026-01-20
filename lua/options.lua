@@ -1,6 +1,9 @@
 -- [[ Setting options ]]
 -- `:help vim.opt`
 
+-- Set to false if you don't have a Nerd Font installed
+vim.g.have_nerd_font = true
+
 -- Set highlight on search
 vim.opt.hlsearch = false
 
@@ -65,3 +68,25 @@ vim.opt.confirm = true
 
 vim.opt.scrolloff = 8
 vim.opt.isfname:append("@-@")
+
+-- Live preview of :substitute
+vim.opt.inccommand = 'split'
+
+-- Highlight current line
+vim.opt.cursorline = true
+
+-- New splits appear below and to the right
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+-- Treesitter-based folding
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevel = 99  -- Start with all folds open
+
+-- Disable auto-comment on new line
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function()
+		vim.opt_local.formatoptions:remove({ "r", "o" })
+	end,
+})

@@ -48,5 +48,5 @@ vim.keymap.set("n", "<leader>-", "<C-w>5<", { desc = "Decrease split width"})
 vim.keymap.set("n", "<leader>=", "<C-w>5>", { desc = "Increase split width"})
 
 -- Horizontal
-vim.keymap.set("n", "<leader>s", "<C-w>5-", { desc = "Decrease split height"})
-vim.keymap.set("n", "<leader>t", "<C-w>5+", { desc = "Increase split height"})
+vim.keymap.set("n", "<leader>w-", "<C-w>5-", { desc = "Decrease split height"})
+vim.keymap.set("n", "<leader>w+", "<C-w>5+", { desc = "Increase split height"})

@@ -16,7 +16,7 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
-			"saghen/blink.cmp",
+			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -127,11 +127,15 @@ return {
 					end,
 				},
 			})
-			local capabilities = require("blink.cmp").get_lsp_capabilities()
+			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 			local servers = {
 				ts_ls = {},
 				pyright = {},
+				cssls = {},
+				html = {},
+				jsonls = {},
+				bashls = {},
 
 				lua_ls = {
 					settings = {
@@ -146,6 +150,7 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"prettier", -- Used to format JS/TS/JSON/YAML/MD
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 

@@ -64,7 +64,7 @@ vim.opt.scrolloff = 8
 vim.opt.isfname:append("@-@")
 
 -- Live preview of :substitute
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- Highlight current line
 vim.opt.cursorline = true
@@ -76,7 +76,20 @@ vim.opt.splitright = true
 -- Treesitter-based folding
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.opt.foldlevel = 99  -- Start with all folds open
+vim.opt.foldlevel = 99 -- Start with all folds open
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
+	callback = function(event)
+		vim.opt_local.foldmethod = "manual"
+		vim.opt_local.foldexpr = "0"
+		vim.schedule(function()
+			if vim.api.nvim_buf_is_valid(event.buf) then
+				vim.treesitter.stop(event.buf)
+			end
+		end)
+	end,
+})
 
 -- Disable auto-comment on new line
 vim.api.nvim_create_autocmd("FileType", {

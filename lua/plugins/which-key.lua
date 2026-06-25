@@ -9,6 +9,8 @@ return {
 		spec = {
 			{ "<leader>s", group = "Search/Split" },
 			{ "<leader>h", group = "Harpoon" },
+			{ "<leader>g", group = "Git" },
+			{ "<leader>t", group = "Terminal/Toggle" },
 			{ "<leader>w", group = "Window" },
 			{ "<leader>x", group = "Diagnostics" },
 			{ "gr", group = "LSP" },

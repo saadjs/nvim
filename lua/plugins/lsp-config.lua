@@ -16,7 +16,7 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"WhoIsSethDaniel/mason-tool-installer.nvim",
 			{ "j-hui/fidget.nvim", opts = {} },
-			"hrsh7th/cmp-nvim-lsp",
+			"saghen/blink.cmp",
 		},
 		config = function()
 			vim.api.nvim_create_autocmd("LspAttach", {
@@ -104,7 +104,7 @@ return {
 			vim.diagnostic.config({
 				severity_sort = true,
 				float = { border = "rounded", source = "if_many" },
-				underline = { severity = vim.diagnostic.severity.ERROR },
+				underline = true,
 				signs = vim.g.have_nerd_font and {
 					text = {
 						[vim.diagnostic.severity.ERROR] = "󰅚 ",
@@ -113,29 +113,32 @@ return {
 						[vim.diagnostic.severity.HINT] = "󰌶 ",
 					},
 				} or {},
-				virtual_text = {
-					source = "if_many",
-					spacing = 2,
-					format = function(diagnostic)
-						local diagnostic_message = {
-							[vim.diagnostic.severity.ERROR] = diagnostic.message,
-							[vim.diagnostic.severity.WARN] = diagnostic.message,
-							[vim.diagnostic.severity.INFO] = diagnostic.message,
-							[vim.diagnostic.severity.HINT] = diagnostic.message,
-						}
-						return diagnostic_message[diagnostic.severity]
-					end,
-				},
+				-- Inline text disabled: rely on squiggly underlines + signs to spot
+				-- diagnostics, and `[d` / `]d` to open the float with the message.
+				virtual_text = false,
 			})
-			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
 			local servers = {
 				ts_ls = {},
-				pyright = {},
 				cssls = {},
 				html = {},
 				jsonls = {},
 				bashls = {},
+
+				-- Lint diagnostics for JS/TS (only active when the project has an
+				-- eslint config). `:LspEslintFixAll` fixes auto-fixable issues.
+				-- NOTE: eslint's `before_init` is force-overridden after
+				-- mason-lspconfig setup below (see the ESLint 9/10 fix).
+				eslint = {},
+
+				-- Tailwind class completion + hover (only active in projects
+				-- with a tailwind config).
+				tailwindcss = {},
+
+				-- Emmet abbreviation expansion (e.g. `ul>li*3` + completion) for
+				-- HTML/CSS/JSX/TSX.
+				emmet_language_server = {},
 
 				lua_ls = {
 					settings = {
@@ -164,6 +167,30 @@ return {
 						require("lspconfig")[server_name].setup(server)
 					end,
 				},
+			})
+
+			-- ESLint 9/10 fix: nvim-lspconfig's default `before_init` force-enables
+			-- the legacy `experimental.useFlatConfig` flag whenever it finds an
+			-- `eslint.config.*` file. That flag routes ESLint 9/10 down a removed
+			-- code path ("doesn't export a FlatESLint class") and silently disables
+			-- linting. The mason-lspconfig handler's `setup()` merge keeps the
+			-- framework `before_init`, so we replace it directly via `vim.lsp.config`
+			-- (force-merge) -- keeping `workspaceFolder` and letting the server
+			-- auto-detect flat config via `loadESLint()`.
+			vim.lsp.config("eslint", {
+				before_init = function(_, config)
+					local root_dir = config.root_dir
+					if root_dir then
+						config.settings = config.settings or {}
+						config.settings.workspaceFolder = {
+							uri = root_dir,
+							name = vim.fn.fnamemodify(root_dir, ":t"),
+						}
+					end
+					config.settings = config.settings or {}
+					config.settings.experimental = config.settings.experimental or {}
+					config.settings.experimental.useFlatConfig = false
+				end,
 			})
 		end,
 	},

@@ -13,12 +13,6 @@ vim.opt.nu = true
 -- Turn on relative line numbers
 vim.opt.relativenumber = true
 
--- relative line numbers in netrw
-vim.cmd([[let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-let g:netrw_banner = 0
-let g:netrw_list_hide = '**/.git,**/.svn,**/.hg,**/.DS_Store,**/Thumbs.db'
-]])
-
 vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4

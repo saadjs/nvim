@@ -11,6 +11,7 @@ return {
 	},
 	{
 		"neovim/nvim-lspconfig",
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			{ "williamboman/mason.nvim", opts = {} },
 			"williamboman/mason-lspconfig.nvim",
@@ -139,6 +140,9 @@ return {
 				-- Emmet abbreviation expansion (e.g. `ul>li*3` + completion) for
 				-- HTML/CSS/JSX/TSX.
 				emmet_language_server = {},
+				yamlls = {},
+				gopls = {},
+				pylsp = {},
 
 				lua_ls = {
 					settings = {
@@ -150,6 +154,21 @@ return {
 					},
 				},
 			}
+
+			servers.eslint.before_init = function(_, config)
+				local root_dir = config.root_dir
+				if root_dir then
+					config.settings = config.settings or {}
+					config.settings.workspaceFolder = {
+						uri = root_dir,
+						name = vim.fn.fnamemodify(root_dir, ":t"),
+					}
+				end
+				config.settings = config.settings or {}
+				config.settings.experimental = config.settings.experimental or {}
+				config.settings.experimental.useFlatConfig = false
+			end
+
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
@@ -159,39 +178,15 @@ return {
 
 			require("mason-lspconfig").setup({
 				ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-				automatic_installation = false,
-				handlers = {
-					function(server_name)
-						local server = servers[server_name] or {}
-						server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-						require("lspconfig")[server_name].setup(server)
-					end,
-				},
+				automatic_enable = false,
 			})
 
-			-- ESLint 9/10 fix: nvim-lspconfig's default `before_init` force-enables
-			-- the legacy `experimental.useFlatConfig` flag whenever it finds an
-			-- `eslint.config.*` file. That flag routes ESLint 9/10 down a removed
-			-- code path ("doesn't export a FlatESLint class") and silently disables
-			-- linting. The mason-lspconfig handler's `setup()` merge keeps the
-			-- framework `before_init`, so we replace it directly via `vim.lsp.config`
-			-- (force-merge) -- keeping `workspaceFolder` and letting the server
-			-- auto-detect flat config via `loadESLint()`.
-			vim.lsp.config("eslint", {
-				before_init = function(_, config)
-					local root_dir = config.root_dir
-					if root_dir then
-						config.settings = config.settings or {}
-						config.settings.workspaceFolder = {
-							uri = root_dir,
-							name = vim.fn.fnamemodify(root_dir, ":t"),
-						}
-					end
-					config.settings = config.settings or {}
-					config.settings.experimental = config.settings.experimental or {}
-					config.settings.experimental.useFlatConfig = false
-				end,
-			})
+			for server_name, server in pairs(servers) do
+				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+				vim.lsp.config(server_name, server)
+			end
+
+			vim.lsp.enable(vim.tbl_keys(servers))
 		end,
 	},
 }

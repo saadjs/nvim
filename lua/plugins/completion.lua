@@ -1,38 +1,48 @@
-return { -- Autocompletion
-	"hrsh7th/nvim-cmp",
-	event = "InsertEnter",
-	dependencies = {
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-path",
-	},
-	config = function()
-		local cmp = require("cmp")
+return { -- Autocompletion (blink.cmp) -- LSP/path/buffer only, no snippets
+	"saghen/blink.cmp",
+	-- Pulls a prebuilt fuzzy-matcher binary from the release, so no Rust
+	-- toolchain or build step is required.
+	version = "1.*",
+	event = { "InsertEnter", "CmdlineEnter" },
+	dependencies = { "folke/lazydev.nvim" },
 
-		cmp.setup({
-			-- Use Neovim's built-in snippet API for LSP snippet expansion
-			snippet = {
-				expand = function(args)
-					vim.snippet.expand(args.body)
-				end,
-			},
-			completion = { completeopt = "menu,menuone,noinsert" },
+	---@module 'blink.cmp'
+	---@type blink.cmp.Config
+	opts = {
+		-- 'default': C-y accept, C-n/C-p select, C-space open menu, C-e hide.
+		-- Matches the old nvim-cmp keymaps so nothing changes for you.
+		keymap = { preset = "default" },
 
-			mapping = cmp.mapping.preset.insert({
-				["<C-n>"] = cmp.mapping.select_next_item(),
-				["<C-p>"] = cmp.mapping.select_prev_item(),
-				["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				["<C-Space>"] = cmp.mapping.complete({}),
-			}),
-			sources = {
-				{
-					name = "nvim_lsp",
-					entry_filter = function(entry, ctx)
-						-- Filter out plain text suggestions
-						return require("cmp.types").lsp.CompletionItemKind[entry:get_kind()] ~= "Text"
-					end,
+		appearance = {
+			nerd_font_variant = "mono",
+		},
+
+		completion = {
+			-- Menu pops up automatically as you type
+			menu = { auto_show = true },
+			-- Show LSP docs for the selected item after a short delay
+			documentation = { auto_show = true, auto_show_delay_ms = 250 },
+			-- No inline preview of the selected item
+			ghost_text = { enabled = false },
+		},
+
+		-- No 'snippets' source -> pure LSP / path / buffer autocompletion.
+		-- (lazydev gives better completions while editing your own nvim config.)
+		sources = {
+			default = { "lazydev", "lsp", "path", "buffer" },
+			providers = {
+				lazydev = {
+					name = "LazyDev",
+					module = "lazydev.integrations.blink",
+					score_offset = 100, -- show its items above LSP
 				},
-				{ name = "path" },
 			},
-		})
-	end,
+		},
+
+		-- Signature help while typing function args
+		signature = { enabled = true },
+
+		fuzzy = { implementation = "prefer_rust_with_warning" },
+	},
+	opts_extend = { "sources.default" },
 }

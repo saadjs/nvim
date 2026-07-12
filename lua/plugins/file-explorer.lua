@@ -50,9 +50,24 @@ return { -- Resizable, toggleable sidebar file tree with git status
 			},
 		},
 
+		-- Neo-tree disables numbers by default; show relative row numbers in the
+		-- tree pane as well as in regular editor windows.
+		event_handlers = {
+			{
+				event = "neo_tree_buffer_enter",
+				handler = function()
+					vim.opt_local.number = true
+					vim.opt_local.relativenumber = true
+				end,
+			},
+		},
+
 		filesystem = {
-			-- Replace netrw: opening a directory opens neo-tree in that window
-			hijack_netrw_behavior = "open_current",
+			-- Replace netrw: opening a directory opens neo-tree in its configured
+			-- sidebar position, leaving a normal editor window available for files.
+			hijack_netrw_behavior = "open_default",
+			-- Prefer the non-tree window when opening a file from the sidebar.
+			open_files_in_last_window = true,
 			-- Keep the tree in sync with the file you're editing
 			follow_current_file = { enabled = true, leave_dirs_open = false },
 			-- Auto-refresh when files change on disk (e.g. after lazygit)

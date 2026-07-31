@@ -18,6 +18,14 @@ vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 
+-- Show tabs and trailing whitespace without marking ordinary spaces
+vim.opt.list = true
+vim.opt.listchars = {
+	tab = "» ",
+	trail = "·",
+	nbsp = "␣",
+}
+
 vim.opt.smartindent = true
 vim.g.autoformat = true
 
@@ -77,19 +85,6 @@ vim.opt.splitright = true
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99 -- Start with all folds open
-
-vim.api.nvim_create_autocmd("FileType", {
-	pattern = "markdown",
-	callback = function(event)
-		vim.opt_local.foldmethod = "manual"
-		vim.opt_local.foldexpr = "0"
-		vim.schedule(function()
-			if vim.api.nvim_buf_is_valid(event.buf) then
-				vim.treesitter.stop(event.buf)
-			end
-		end)
-	end,
-})
 
 -- Disable auto-comment on new line
 vim.api.nvim_create_autocmd("FileType", {

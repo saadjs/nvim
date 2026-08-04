@@ -23,18 +23,19 @@ return { -- Resizable, toggleable sidebar file tree with git status
 		enable_diagnostics = true,
 
 		default_component_configs = {
-			-- Basic Unicode symbols that render in any font (no Nerd Font glyphs)
+			-- Use single-letter source-control decorations.
 			git_status = {
 				symbols = {
-					added = "✚",
-					modified = "●",
-					deleted = "✖",
-					renamed = "➜",
-					untracked = "★",
-					ignored = "◌",
-					unstaged = "✗",
-					staged = "✓",
-					conflict = "",
+					added = "A",
+					modified = "M",
+					deleted = "D",
+					renamed = "R",
+					untracked = "U",
+					ignored = "",
+					-- Avoid a second symbol beside the change-type letter.
+					unstaged = "",
+					staged = "",
+					conflict = "C",
 				},
 			},
 		},
